@@ -1,6 +1,6 @@
 # ExchangeRateAPI_v2
 
-###This API offers 4 possible operations:</br>
+### This API offers 4 possible operations:</br>
 
 a. Get exchange rate from Currency A to Currency B with "/rate" endpoint</br>
 b. Get all exchange rates from Currency A with "/rate" endpoint</br>
@@ -11,7 +11,7 @@ Data used for presenting results is retreived from this public API [ExchangeRate
 
 The base API path is "/api/v2".</br>
 
-###Instructions on how to run</br>
+### Instructions on how to run</br>
 Application default port is 8080.</br>
 
 Clone the repository to your machine.</br>
