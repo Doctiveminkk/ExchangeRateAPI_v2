@@ -1,4 +1,4 @@
-package exchange.rate.v2.exchangev2;
+package exchange.rate.v2.exchangev2.controller;
 
 import java.util.Optional;
 
@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import exchange.rate.v2.exchangev2.model.ResponseModel;
 import exchange.rate.v2.exchangev2.service.ExchangeRateBSV;
+import lombok.AllArgsConstructor;
 
 // Controller with all api endpoints
 @RestController
 @RequestMapping("/api/v2")
+@AllArgsConstructor
 public class ExchangeRateController {
   @Autowired
   private ExchangeRateBSV service;

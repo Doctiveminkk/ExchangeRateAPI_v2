@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 
 import exchange.rate.v2.exchangev2.errorHandling.ErrorHandling;
 import exchange.rate.v2.exchangev2.model.ResponseModel;
+import lombok.AllArgsConstructor;
 // Service Responsible For User Input Error Handling, BusinessLogic and Response Building
 @Service
+@AllArgsConstructor
 public class ExchangeRateBSV {
   @Autowired
   private ExternalCallService externalCall;

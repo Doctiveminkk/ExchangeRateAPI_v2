@@ -6,6 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.stereotype.Component;
+
+// User Input Error Handling
 @Component
 public class ErrorHandling {
   
@@ -14,6 +16,7 @@ public class ErrorHandling {
   private final int DEFAULT_AMOUNT = 1;
   private String error = "";
   
+  // Getter for Error Property. If Error String is Empty Return Null
   public String getError() {
     if (error.equals("")){
       return null;
@@ -24,7 +27,7 @@ public class ErrorHandling {
   public int getDEFAULT_AMOUNT() {
     return DEFAULT_AMOUNT;
   }
-
+  // Check Is Provided From Parameter Is On The Map Of Currency Rates
   public String checkFromParameter(Optional<String> from, Map<String, Double> map){
     if (!map.keySet().contains(from.get()) || !from.isPresent()){
       error = error+"Provided From Parameter Not Valid. Defaulted To EUR. ";
@@ -32,7 +35,7 @@ public class ErrorHandling {
     }
     return from.get();
   }
-
+  // Check Is Provided To Parameter Is On The Map Of Currency Rates
   public String checkToParameter(Optional<String> to, Map<String, Double> map){
     if (to.get().length()>3 || !to.isPresent()){
       String[] paramArr = to.get().split(",");
@@ -49,7 +52,7 @@ public class ErrorHandling {
     }
     return to.get();
   }
-
+  // Check if Provided Amount Parameter Is Made Of Digits And Is Greater Than 0
   public int checkAmountParameter(Optional<String> amount){
     Pattern p = Pattern.compile("[0-9]+");
     Matcher m = p.matcher(amount.get());

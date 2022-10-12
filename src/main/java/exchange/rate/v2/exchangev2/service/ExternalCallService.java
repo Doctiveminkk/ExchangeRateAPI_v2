@@ -8,8 +8,10 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import exchange.rate.v2.exchangev2.model.CurrencyRates;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class ExternalCallService {
   
   private final String SCHEME = "https";
