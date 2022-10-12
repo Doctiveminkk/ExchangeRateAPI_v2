@@ -16,10 +16,10 @@ public class ExternalCallService {
   private final String HOST = "api.exchangerate.host";
   private final String LATEST_RATES = "latest";
   @Autowired
-  private CurrencyRates rates;
+  private CurrencyRates ratesObject;
 
-  public CurrencyRates getRates() {
-    return rates;
+  public CurrencyRates getRatesObject() {
+    return ratesObject;
   }
 
   //Scheduled External API Call to Retrieve Currency Rates Every One Minute
@@ -33,6 +33,6 @@ public class ExternalCallService {
     .path(LATEST_RATES)
     .build();
     // Build CurrencyRates Object Based on ExternalResponse Data
-    rates = template.getForObject(uri.toUriString(), CurrencyRates.class);
+    ratesObject = template.getForObject(uri.toUriString(), CurrencyRates.class);
   }
 }

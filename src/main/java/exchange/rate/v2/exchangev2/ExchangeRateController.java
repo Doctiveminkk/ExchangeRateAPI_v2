@@ -27,7 +27,7 @@ public class ExchangeRateController {
   }
 
   @GetMapping("/convert")
-  public ResponseModel convertCurrency(@RequestParam Optional<String> from,@RequestParam Optional<String> to,@RequestParam Optional<Integer> amount){
+  public ResponseModel convertCurrency(@RequestParam Optional<String> from,@RequestParam Optional<String> to,@RequestParam Optional<String> amount){
     if (to.get().length()>3){
       return service.convertCurrencyToMany(from, to, amount);
     }

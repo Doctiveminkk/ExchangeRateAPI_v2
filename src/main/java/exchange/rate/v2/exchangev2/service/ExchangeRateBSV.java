@@ -9,81 +9,96 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import exchange.rate.v2.exchangev2.errorHandling.ErrorHandling;
 import exchange.rate.v2.exchangev2.model.ResponseModel;
-
+// Service Responsible For User Input Error Handling, BusinessLogic and Response Building
 @Service
 public class ExchangeRateBSV {
   @Autowired
   private ExternalCallService externalCall;
 
-  private final int DEFAULT_AMOUNT = 1;
-
-
-  // !!!!!!!!
-  private String date = LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-YYYY"));
-
   // Calculate ExchangeRate from One Currency to Another
-  public ResponseModel calculateRate(Optional<String> from, Optional<String> to){
+  public ResponseModel calculateRate(Optional<String> fromParam, Optional<String> toParam){
+    // Error Handling
+    ErrorHandling errorHandling = new ErrorHandling();
+    String from = errorHandling.checkFromParameter(fromParam, externalCall.getRatesObject().getRates());
+    String to = errorHandling.checkToParameter(toParam, externalCall.getRatesObject().getRates());
+    if (to.equals("")){
+      return calculateAllRates(fromParam);
+    }
     // Business Logic
     Map<String, Double> rateChosenCurrency = new HashMap<>();
-    rateChosenCurrency.put(to.get(), externalCall.getRates().getRates().get(to.get()) / externalCall.getRates().getRates().get(from.get()));
+    rateChosenCurrency.put(to, externalCall.getRatesObject().getRates().get(to) / externalCall.getRatesObject().getRates().get(from));
     // Response Builder
     return ResponseModel.builder()
-    .error("")
+    .error(errorHandling.getError())
     .success(null)
-    .date(date)
-    .sourceCurrency(from.get())
-    .amount(DEFAULT_AMOUNT)
+    .date(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-YYYY")))
+    .sourceCurrency(from)
+    .amount(errorHandling.getDEFAULT_AMOUNT())
     .rates(rateChosenCurrency)
     .build();
   }
   // Calculate All Rates for One Currency
-  public ResponseModel calculateAllRates(Optional<String> from){
+  public ResponseModel calculateAllRates(Optional<String> fromParam){
+    // Error Handling
+    ErrorHandling errorHandling = new ErrorHandling();
+    String from = errorHandling.checkFromParameter(fromParam, externalCall.getRatesObject().getRates());
     // Business Logic
     Map<String, Double> ratesChosenCurrency = new HashMap<>();
-    for (String item : externalCall.getRates().getRates().keySet()){
-      ratesChosenCurrency.put(item, externalCall.getRates().getRates().get(item) / externalCall.getRates().getRates().get(from.get()));
+    for (String item : externalCall.getRatesObject().getRates().keySet()){
+      ratesChosenCurrency.put(item, externalCall.getRatesObject().getRates().get(item) / externalCall.getRatesObject().getRates().get(from));
     }
     // Response Builder
     return ResponseModel.builder()
-    .error("")
+    .error(errorHandling.getError())
     .success(null)
-    .date(date)
-    .sourceCurrency(from.get())
-    .amount(DEFAULT_AMOUNT)
+    .date(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-YYYY")))
+    .sourceCurrency(from)
+    .amount(errorHandling.getDEFAULT_AMOUNT())
     .rates(ratesChosenCurrency)
     .build();
   }
   // Calculate Value Conversion from One Currency to Another
-  public ResponseModel convertCurrency(Optional<String> from, Optional<String> to, Optional<Integer> amount){
+  public ResponseModel convertCurrency(Optional<String> fromParam, Optional<String> toParam, Optional<String> amountParam){
+    // Error Handling
+    ErrorHandling errorHandling = new ErrorHandling();
+    String from = errorHandling.checkFromParameter(fromParam, externalCall.getRatesObject().getRates());
+    String to = errorHandling.checkToParameter(toParam, externalCall.getRatesObject().getRates());
+    int amount = errorHandling.checkAmountParameter(amountParam);
     // Business Logic
     Map<String, Double> rateChosenCurrency = new HashMap<>();
-    rateChosenCurrency.put(to.get(), (externalCall.getRates().getRates().get(to.get()) / externalCall.getRates().getRates().get(from.get()))*amount.get());
+    rateChosenCurrency.put(to, (externalCall.getRatesObject().getRates().get(to) / externalCall.getRatesObject().getRates().get(from))*amount);
     // Response Builder
     return ResponseModel.builder()
-    .error("")
+    .error(errorHandling.getError())
     .success(null)
-    .date(date)
-    .sourceCurrency(from.get())
-    .amount(amount.get())
+    .date(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-YYYY")))
+    .sourceCurrency(from)
+    .amount(amount)
     .rates(rateChosenCurrency)
     .build();
   }
   // Calculate Value Conversion from One Currency to Several Others
-  public ResponseModel convertCurrencyToMany(Optional<String> from, Optional<String> to, Optional<Integer> amount){
+  public ResponseModel convertCurrencyToMany(Optional<String> fromParam, Optional<String> toParam, Optional<String> amountParam){
+    // Error Handling
+    ErrorHandling errorHandling = new ErrorHandling();
+    String from = errorHandling.checkFromParameter(fromParam, externalCall.getRatesObject().getRates());
+    String to = errorHandling.checkToParameter(toParam, externalCall.getRatesObject().getRates());
+    int amount = errorHandling.checkAmountParameter(amountParam);
     // Business Logic
-    String[] currencyArr = to.get().split(",");
+    String[] currencyArr = to.split(",");
     Map<String, Double> rateChosenCurrency = new HashMap<>();
     for (int i = 0; i < currencyArr.length; i++) {
-      rateChosenCurrency.put(currencyArr[i], (externalCall.getRates().getRates().get(currencyArr[i]) / externalCall.getRates().getRates().get(from.get()))*amount.get());
+      rateChosenCurrency.put(currencyArr[i], (externalCall.getRatesObject().getRates().get(currencyArr[i]) / externalCall.getRatesObject().getRates().get(from))*amount);
     }
     // Response Builder
     return ResponseModel.builder()
-    .error("")
+    .error(errorHandling.getError())
     .success(null)
-    .date(date)
-    .sourceCurrency(from.get())
-    .amount(amount.get())
+    .date(LocalDate.now().format(DateTimeFormatter.ofPattern("dd-MM-YYYY")))
+    .sourceCurrency(from)
+    .amount(amount)
     .rates(rateChosenCurrency)
     .build();
   }
