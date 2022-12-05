@@ -19,4 +19,4 @@ Open the project's root directory with any IDE.</br>
 Run the application.</br>
 Use any HTTP client to do requests.</br>
 
-Once the application is running in your machine check the documentation with this link [SwaggerDOC](http://localhost:8080/swagger-io.html)
+Once the application is running in your machine check the documentation with this link [SwaggerDOC](http://localhost:8080/swagger-ui.html)
